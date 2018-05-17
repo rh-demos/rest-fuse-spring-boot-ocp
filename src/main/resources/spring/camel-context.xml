@@ -5,6 +5,9 @@
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+  <bean id="greetingService" class="org.example.fis.GreetingService">
+    <property name="name" value="Jacob"/>
+  </bean>
   <!-- Define a traditional camel context here -->
   <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
     <restConfiguration component="servlet" bindingMode="json" port="8080"> 
@@ -16,9 +19,12 @@
     </rest>
     <route>
       <from uri="direct:hello"/>
-      <transform>
+      <setBody>
+        <method ref="greetingService" method="getGreeting"/>
+      </setBody>
+      <!--transform>
         <simple>Hello World</simple>
-      </transform>
+      </transform-->
     </route>
     <!--route id="simple-route">
       <from id="route-timer" uri="timer:foo?period=2000"/>

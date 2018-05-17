@@ -5,34 +5,29 @@
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
   <bean id="greetingService" class="org.example.fis.GreetingService">
-    <property name="name" value="Jacob"/>
+    <property name="standardGreeting" value="You rock "/>
   </bean>
   <!-- Define a traditional camel context here -->
   <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
     <restConfiguration component="servlet" bindingMode="json" port="8080"> 
     </restConfiguration>
     <rest path="/say/">
+      <get uri="/hello/{name}">
+        <to uri="direct:hello"/>
+      </get>
       <get uri="/hello">
         <to uri="direct:hello"/>
       </get>
     </rest>
     <route>
       <from uri="direct:hello"/>
+      <log id="_log1" message="Request from ${header.name}"/>
       <setBody>
         <method ref="greetingService" method="getGreeting"/>
       </setBody>
-      <!--transform>
-        <simple>Hello World</simple>
-      </transform-->
+      <log id="_log1" message="Response ${body.greeting}"/>
     </route>
-    <!--route id="simple-route">
-      <from id="route-timer" uri="timer:foo?period=2000"/>
-      <transform id="route-transform">
-        <method ref="myTransformer"/>
-      </transform>
-      <log id="route-log" message=">>> ${body}"/>
-    </route-->
   </camelContext>
-
 </beans>

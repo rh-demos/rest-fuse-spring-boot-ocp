@@ -1,14 +1,16 @@
 package org.example.fis;
 
+import org.apache.camel.Exchange;
+
 public class GreetingService {
-    private String name;
-    public void setName(String newName) {
-        name = newName;
+    private String standardGreeting;
+    public void setStandardGreeting(String newStandardGreeting) {
+        standardGreeting = newStandardGreeting;
     }
-    public String getName() {
-        return name;
+    public String getStandardGreeting() {
+        return standardGreeting;
     }
-    public Greeting getGreeting() {
-        return new Greeting(name);
+    public Greeting getGreeting(Exchange exchange) {
+        return new Greeting(standardGreeting + exchange.getIn().getHeader("name", "stranger", String.class));
     }
 }

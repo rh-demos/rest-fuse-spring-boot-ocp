@@ -1,0 +1,13 @@
+kind: "Service"
+apiVersion: "v1"
+metadata:
+  name: "external-oracle-service"
+spec:
+  ports:
+    -
+      name: "oracle-port"
+      protocol: "TCP"
+      port: 1521
+      targetPort: 1521
+      nodePort: 0
+selector: {}

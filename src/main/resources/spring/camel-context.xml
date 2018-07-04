@@ -9,25 +9,48 @@
   <bean id="greetingService" class="org.example.fis.GreetingService">
     <property name="standardGreeting" value="You rock "/>
   </bean>
+
+  <!--bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+    <property name="url" value="jdbc:oracle:thin:@external-oracle-service:1521:orcl"/>
+    <property name="username" value="jborella"/>
+    <property name="password" value="redhat123"/>
+  </bean-->
+
   <!-- Define a traditional camel context here -->
   <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
     <restConfiguration component="servlet" bindingMode="json" port="8080"> 
     </restConfiguration>
     <rest path="/say/">
-      <get uri="/hello/{name}">
-        <to uri="direct:hello"/>
-      </get>
-      <get uri="/hello">
+      <get uri="/hello/{id}">
         <to uri="direct:hello"/>
       </get>
     </rest>
     <route>
       <from uri="direct:hello"/>
       <log id="_log1" message="Request from ${header.name}"/>
+      <to uri="sql:select * from employees where EMPLOYEE_ID=:#${header.id}"/>
       <setBody>
         <method ref="greetingService" method="getGreeting"/>
       </setBody>
       <log id="_log1" message="Response ${body.greeting}"/>
     </route>
   </camelContext>
+  <!-- configure the Camel SQL component to use the JDBC data source -->
+  <beans profile="development">
+    <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
+      <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+      <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+      <property name="url" value="jdbc:derby:memory:orders;create=true"/>
+      <property name="username" value=""/>
+      <property name="password" value=""/>
+    </bean>
+    <bean id="initDatabase" class="org.example.fis.DatabaseBean"
+          init-method="create" destroy-method="destroy">
+      <property name="dataSource" ref="dataSource"/>
+    </bean>
+  </beans>
+
 </beans>

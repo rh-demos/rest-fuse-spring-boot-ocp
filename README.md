@@ -8,7 +8,12 @@ The application utilizes the Spring [`@ImportResource`](http://docs.spring.io/sp
 
 The example can be built with
 
-    mvn clean install
+    mvn clean package
+
+### Running the example locally on your machine
+
+mvn spring-boot:run -Dspring-boot.run.profiles=development
+java -jar -Dspring.profiles.active=development target/fis-spring-boot-1.0-SNAPSHOT.jar
 
 ### Running the example in OpenShift
 

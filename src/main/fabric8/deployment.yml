@@ -4,7 +4,7 @@ spec:
       containers:
       - env:
         - name: SPRING_PROFILES_ACTIVE
-          value: development
+          value: production
         resources:
           requests:
             cpu: "0.2"

@@ -33,7 +33,7 @@
     </route>
   </camelContext>
   <!-- configure the Camel SQL component to use the JDBC data source -->
-  <beans profile="development">
+  <beans profile="development,default">
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
       <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver"/>
       <property name="url" value="jdbc:derby:memory:orders;create=true"/>

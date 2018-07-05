@@ -7,7 +7,7 @@
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
   <bean id="greetingService" class="org.example.fis.GreetingService">
-    <property name="standardGreeting" value="You rock "/>
+    <property name="standardGreeting" value="You are the best "/>
   </bean>
   <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
     <property name="dataSource" ref="dataSource"/>
